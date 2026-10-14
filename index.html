@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Belles Nuits - Sistema de Gestión Victoriano</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            100: '#FFF9E6',
+                            300: '#E6CA65',
+                            400: '#D4AF37',
+                            500: '#C5A059',
+                            600: '#A37F2C',
+                            700: '#7A5C1B'
+                        },
+                        burgundy: {
+                            900: '#2A060B',
+                            800: '#3D0910',
+                            700: '#4A0E17',
+                            600: '#681320',
+                            500: '#800020'
+                        },
+                        velvet: '#110A0C',
+                        parchment: '#F7F3E8',
+                        parchmentDark: '#1E1B18'
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        cinzelDeco: ['"Cinzel Decorative"', 'serif'],
+                        garamond: ['"Cormorant Garamond"', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Victorian Styling */
+        body {
+            background-color: #110A0C;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(74, 14, 23, 0.4) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(128, 0, 32, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+            color: #E2D3C4;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .gold-border {
+            border: 2px solid #D4AF37;
+            border-image: linear-gradient(135deg, #FFF9E6 0%, #D4AF37 50%, #7A5C1B 100%) 1;
+        }
+
+        .gold-border-rounded {
+            border: 1px solid #D4AF37;
+            box-shadow: inset 0 0 8px rgba(212, 175, 55, 0.15), 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF9E6 0%, #E6CA65 30%, #D4AF37 60%, #99741B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-button {
+            background: linear-gradient(180deg, #D4AF37 0%, #A37F2C 100%);
+            color: #110A0C;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.4);
+            transition: all 0.2s ease;
+        }
+
+        .gold-button:hover {
+            background: linear-gradient(180deg, #E6CA65 0%, #C5A059 100%);
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(255,255,255,0.6);
+            transform: translateY(-1px);
+        }
+
+        .burgundy-card {
+            background: linear-gradient(145deg, rgba(61, 9, 16, 0.9) 0%, rgba(26, 5, 8, 0.95) 100%);
+            backdrop-filter: blur(5px);
+        }
+
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: #110A0C;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: #4A0E17;
+            border: 1px solid #D4AF37;
+            border-radius: 3px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+            background: #800020;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(180deg, #4A0E17 0%, #2A060B 100%);
+            border-color: #D4AF37;
+            color: #E6CA65;
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+        }
+
+        /* Victorian Ornaments */
+        .ornament-line {
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+        .ornament-line::before, .ornament-line::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #D4AF37;
+            opacity: 0.4;
+        }
+        .ornament-line:not(:empty)::before {
+            margin-right: .5em;
+        }
+        .ornament-line:not(:empty)::after {
+            margin-left: .5em;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-burgundy-500 selection:text-gold-300">
+
+    <!-- HEADER / HERO BRANDING -->
+    <header class="relative border-b-2 border-gold-500/40 bg-gradient-to-b from-velvet via-burgundy-900 to-velvet py-6 px-4 shadow-2xl">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            <!-- Logo display -->
+            <div class="flex items-center space-x-5 text-center md:text-left">
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-gold-400 to-burgundy-500 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500"></div>
+                    <img src="https://placehold.co/120x120/3d0910/d4af37?text=Les+Belles+Nuits" 
+                         alt="Les Belles Nuits Logo" 
+                         id="logoImage"
+                         class="relative w-24 h-24 md:w-28 md:h-28 rounded-full border-2 border-gold-400 object-cover shadow-2xl">
+                </div>
+                <div>
+                    <h1 class="font-cinzelDeco text-2xl md:text-4xl text-gold-400 tracking-wider gold-gradient-text drop-shadow">
+                        LES BELLES NUITS
+                    </h1>
+                    <p class="font-cinzel text-xs md:text-sm tracking-widest text-gold-300/80 uppercase mt-1">
+                        Planificación de Eventos y Entretenimiento
+                    </p>
+                    <div class="text-xs italic text-gray-400 mt-0.5 font-garamond">
+                        Silverpeak y México &bull; <span class="text-gold-400/90 font-cinzel">"Vous avez le caprice. Nous avons les moyens."</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Cash Summary Header Badge -->
+            <div class="burgundy-card border border-gold-500/50 p-4 rounded-lg flex items-center gap-6 shadow-xl w-full md:w-auto justify-around">
+                <div class="text-center border-r border-gold-500/30 pr-6">
+                    <span class="text-xs uppercase font-cinzel text-gray-400 tracking-widest block">Caja Fuerte</span>
+                    <span id="headerCashDrawer" class="font-cinzel text-2xl font-bold text-gold-300">$0.00</span>
+                </div>
+                <div class="text-center">
+                    <span class="text-xs uppercase font-cinzel text-gray-400 tracking-widest block">Balance Neto</span>
+                    <span id="headerNetBalance" class="font-cinzel text-2xl font-bold text-emerald-400">$0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="max-w-7xl mx-auto mt-6 flex flex-wrap justify-center md:justify-start gap-2 border-t border-gold-500/20 pt-4">
+            <button onclick="switchTab('pos')" id="tab-pos" class="tab-btn active font-cinzel text-xs md:text-sm uppercase tracking-wider px-5 py-2.5 rounded-t-md border border-gold-500/30 text-gray-300 hover:text-gold-300 transition-all flex items-center gap-2">
+                <i class="fa-solid fa-cash-register text-gold-400"></i> Caja Registradora
+            </button>
+            <button onclick="switchTab('catalog')" id="tab-catalog" class="tab-btn font-cinzel text-xs md:text-sm uppercase tracking-wider px-5 py-2.5 rounded-t-md border border-gold-500/30 text-gray-300 hover:text-gold-300 transition-all flex items-center gap-2">
+                <i class="fa-solid fa-concierge-bell text-gold-400"></i> Servicios & Menú
+            </button>
+            <button onclick="switchTab('payroll')" id="tab-payroll" class="tab-btn font-cinzel text-xs md:text-sm uppercase tracking-wider px-5 py-2.5 rounded-t-md border border-gold-500/30 text-gray-300 hover:text-gold-300 transition-all flex items-center gap-2">
+                <i class="fa-solid fa-users-gear text-gold-400"></i> Sueldos y Personal
+            </button>
+            <button onclick="switchTab('ledger')" id="tab-ledger" class="tab-btn font-cinzel text-xs md:text-sm uppercase tracking-wider px-5 py-2.5 rounded-t-md border border-gold-500/30 text-gray-300 hover:text-gold-300 transition-all flex items-center gap-2">
+                <i class="fa-solid fa-book-journal-whills text-gold-400"></i> Libro Contable
+            </button>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto w-full p-4 md:p-6 flex-grow">
+
+        <!-- SECTION 1: CAJA REGISTRADORA (POS) -->
+        <section id="sec-pos" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Left Side: Catalog Quick Picks -->
+            <div class="lg:col-span-7 flex flex-col gap-4">
+                <div class="burgundy-card border border-gold-500/40 p-5 rounded-lg shadow-xl">
+                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-gold-500/20">
+                        <h2 class="font-cinzel text-xl text-gold-400 font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-gem"></i> Catálogo de Servicios & Ofertas
+                        </h2>
+                        <!-- Category Filter -->
+                        <select id="posCategoryFilter" onchange="renderPOSCatalog()" class="bg-velvet text-gold-300 border border-gold-500/40 rounded px-3 py-1 font-cinzel text-xs focus:outline-none focus:border-gold-400">
+                            <option value="ALL">Todas las Categorías</option>
+                            <option value="Eventos">Eventos & Planificación</option>
+                            <option value="VIP">Servicios VIP & Privados</option>
+                            <option value="Bebidas">Licores & Bebidas</option>
+                            <option value="Catering">Gastronomía & Catering</option>
+                            <option value="Espectáculos">Shows & Entretenimiento</option>
+                        </select>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="relative mb-4">
+                        <input type="text" id="posSearch" oninput="renderPOSCatalog()" placeholder="Buscar servicio o producto..." 
+                               class="w-full bg-velvet/80 text-parchment border border-gold-500/30 rounded pl-10 pr-4 py-2 text-sm focus:border-gold-400 focus:outline-none placeholder-gray-500">
+                        <i class="fa-solid fa-search absolute left-3 top-3 text-gold-500/60"></i>
+                    </div>
+
+                    <!-- Grid of POS Items -->
+                    <div id="posGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[480px] overflow-y-auto scrollbar-custom pr-1">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+
+                <!-- Custom Service Input Form -->
+                <div class="burgundy-card border border-gold-500/40 p-4 rounded-lg shadow-xl">
+                    <h3 class="font-cinzel text-sm text-gold-400 font-bold mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-nib"></i> Añadir Cargo Personalizado / Capricho
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <input type="text" id="customName" placeholder="Descripción del servicio" class="sm:col-span-1 bg-velvet text-sm text-parchment border border-gold-500/30 rounded px-3 py-1.5 focus:border-gold-400 focus:outline-none">
+                        <input type="number" id="customPrice" placeholder="Precio ($)" step="0.01" min="0" class="bg-velvet text-sm text-parchment border border-gold-500/30 rounded px-3 py-1.5 focus:border-gold-400 focus:outline-none">
+                        <button onclick="addCustomToCart()" class="gold-button font-cinzel text-xs font-bold py-2 rounded uppercase tracking-wider flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Añadir
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Order Ticket & Payment Calculator -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                <div class="burgundy-card border-2 border-gold-500/60 p-5 rounded-lg shadow-2xl relative flex flex-col justify-between min-h-[550px]">
+                    
+                    <div>
+                        <!-- Ticket Header -->
+                        <div class="text-center pb-3 mb-3 border-b border-gold-500/30">
+                            <h2 class="font-cinzelDeco text-lg text-gold-300">Ticket de Venta</h2>
+                            <p class="text-xs font-cinzel text-gray-400 tracking-widest">LES BELLES NUITS</p>
+                        </div>
+
+                        <!-- Ticket Items List -->
+                        <div id="cartList" class="space-y-2 max-h-[220px] overflow-y-auto scrollbar-custom pr-1 mb-4">
+                            <!-- Items populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Receipt Summary & Payment Calculation -->
+                    <div class="border-t border-gold-500/40 pt-4 space-y-3">
+                        
+                        <!-- Employee Attribution for Commission -->
+                        <div class="flex justify-between items-center text-xs">
+                            <label class="font-cinzel text-gold-300 flex items-center gap-1">
+                                <i class="fa-solid fa-user-tie text-gold-500"></i> Atendido por:
+                            </label>
+                            <select id="cartEmployeeSelect" class="bg-velvet text-gold-300 border border-gold-500/40 rounded px-2 py-1 text-xs focus:outline-none">
+                                <option value="">-- Ninguno (Casa) --</option>
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+
+                        <!-- Total display -->
+                        <div class="flex justify-between items-baseline bg-velvet/90 p-3 rounded border border-gold-500/30">
+                            <span class="font-cinzel text-sm uppercase text-gray-300 tracking-wider">Total a Pagar:</span>
+                            <span id="cartTotal" class="font-cinzel text-2xl font-bold text-gold-400">$0.00</span>
+                        </div>
+
+                        <!-- Cash Paid & Change Calculator -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-cinzel text-xs text-gray-300 mb-1">Monto Entregado ($):</label>
+                                <input type="number" id="cashTendered" oninput="calculateChange()" placeholder="0.00" min="0" step="0.01"
+                                       class="w-full bg-velvet text-gold-300 border border-gold-500/40 rounded px-3 py-1.5 font-cinzel text-lg font-bold focus:border-gold-400 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block font-cinzel text-xs text-gray-300 mb-1">Cambio a Devolver:</label>
+                                <div id="changeDue" class="w-full bg-velvet/50 border border-gold-500/20 rounded px-3 py-1.5 font-cinzel text-lg font-bold text-emerald-400 text-right">
+                                    $0.00
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Denominations / Cash Shortcuts -->
+                        <div class="flex flex-wrap gap-1.5 justify-center py-1">
+                            <button onclick="setTenderedExact()" class="text-[10px] font-cinzel bg-velvet hover:bg-gold-500/20 border border-gold-500/30 px-2 py-1 rounded text-gold-300 transition">Pago Exacto</button>
+                            <button onclick="addTendered(10)" class="text-[10px] font-cinzel bg-velvet hover:bg-gold-500/20 border border-gold-500/30 px-2 py-1 rounded text-gold-300 transition">+$10</button>
+                            <button onclick="addTendered(50)" class="text-[10px] font-cinzel bg-velvet hover:bg-gold-500/20 border border-gold-500/30 px-2 py-1 rounded text-gold-300 transition">+$50</button>
+                            <button onclick="addTendered(100)" class="text-[10px] font-cinzel bg-velvet hover:bg-gold-500/20 border border-gold-500/30 px-2 py-1 rounded text-gold-300 transition">+$100</button>
+                            <button onclick="addTendered(500)" class="text-[10px] font-cinzel bg-velvet hover:bg-gold-500/20 border border-gold-500/30 px-2 py-1 rounded text-gold-300 transition">+$500</button>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <button onclick="clearCart()" class="bg-burgundy-900/80 hover:bg-burgundy-800 text-gray-300 border border-burgundy-600 font-cinzel text-xs font-bold py-2.5 rounded uppercase tracking-wider transition">
+                                <i class="fa-solid fa-trash"></i> Cancelar
+                            </button>
+                            <button onclick="processCheckout()" class="gold-button font-cinzel text-xs font-bold py-2.5 rounded uppercase tracking-wider flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-coins"></i> Registrar Venta
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SECTION 2: CATALOG / SERVICE MANAGER -->
+        <section id="sec-catalog" class="hidden space-y-6">
+            <div class="burgundy-card border border-gold-500/40 p-6 rounded-lg shadow-xl">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-gold-500/30">
+                    <div>
+                        <h2 class="font-cinzel text-2xl text-gold-400 font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-concierge-bell"></i> Catálogo de Servicios y Productos
+                        </h2>
+                        <p class="text-xs text-gray-400 font-garamond italic">Administre la carta de ofertas, servicios VIP y bebidas de Les Belles Nuits.</p>
+                    </div>
+                    <button onclick="openItemModal()" class="gold-button font-cinzel text-xs font-bold px-4 py-2.5 rounded uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i> Nuevo Servicio / Oferta
+                    </button>
+                </div>
+
+                <!-- Catalog Items Table / Grid -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-300">
+                        <thead class="bg-velvet text-gold-400 font-cinzel text-xs uppercase border-b border-gold-500/40">
+                            <tr>
+                                <th class="p-3">Nombre</th>
+                                <th class="p-3">Categoría</th>
+                                <th class="p-3">Descripción</th>
+                                <th class="p-3 text-right">Precio ($)</th>
+                                <th class="p-3 text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="catalogTableBody" class="divide-y divide-gold-500/10">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: PAYROLL & STAFF MANAGEMENT -->
+        <section id="sec-payroll" class="hidden space-y-6">
+            <div class="burgundy-card border border-gold-500/40 p-6 rounded-lg shadow-xl">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-gold-500/30">
+                    <div>
+                        <h2 class="font-cinzel text-2xl text-gold-400 font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-users-gear"></i> Personal y Control de Sueldos
+                        </h2>
+                        <p class="text-xs text-gray-400 font-garamond italic">Gestione el equipo, asigne sueldos fijos, comisiones de eventos y liquide pagos desde la caja.</p>
+                    </div>
+                    <button onclick="openStaffModal()" class="gold-button font-cinzel text-xs font-bold px-4 py-2.5 rounded uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-user-plus"></i> Registrar Empleado
+                    </button>
+                </div>
+
+                <!-- Staff List Grid -->
+                <div id="staffGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Dynamic staff cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: LIBRO DE CONTABILIDAD (LEDGER) -->
+        <section id="sec-ledger" class="hidden space-y-6">
+            <!-- Summary Stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="burgundy-card border border-gold-500/30 p-4 rounded-lg text-center">
+                    <span class="font-cinzel text-xs uppercase text-gray-400 tracking-wider block mb-1">Total Ingresos</span>
+                    <span id="ledgerInflows" class="font-cinzel text-2xl font-bold text-emerald-400">$0.00</span>
+                </div>
+                <div class="burgundy-card border border-gold-500/30 p-4 rounded-lg text-center">
+                    <span class="font-cinzel text-xs uppercase text-gray-400 tracking-wider block mb-1">Total Egresos</span>
+                    <span id="ledgerOutflows" class="font-cinzel text-2xl font-bold text-rose-400">$0.00</span>
+                </div>
+                <div class="burgundy-card border border-gold-500/30 p-4 rounded-lg text-center">
+                    <span class="font-cinzel text-xs uppercase text-gray-400 tracking-wider block mb-1">Ganancia Neta</span>
+                    <span id="ledgerNet" class="font-cinzel text-2xl font-bold text-gold-300">$0.00</span>
+                </div>
+                <div class="burgundy-card border border-gold-500/30 p-4 rounded-lg text-center">
+                    <span class="font-cinzel text-xs uppercase text-gray-400 tracking-wider block mb-1">Efectivo en Caja</span>
+                    <span id="ledgerCash" class="font-cinzel text-2xl font-bold text-gold-400">$0.00</span>
+                </div>
+            </div>
+
+            <!-- Ledger Table & Actions -->
+            <div class="burgundy-card border border-gold-500/40 p-6 rounded-lg shadow-xl">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-4 border-b border-gold-500/30">
+                    <div>
+                        <h2 class="font-cinzel text-2xl text-gold-400 font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-book-journal-whills"></i> Libro Diario de Contabilidad
+                        </h2>
+                        <p class="text-xs text-gray-400 font-garamond italic">Registro cronológico e inmutable de todos los movimientos monetarios.</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <!-- Manual Entry Button -->
+                        <button onclick="openManualTransactionModal()" class="bg-velvet border border-gold-500/50 hover:bg-gold-500/20 text-gold-300 font-cinzel text-xs px-3 py-2 rounded uppercase tracking-wider flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-plus-minus"></i> Ajuste Manual
+                        </button>
+                        <!-- Filter -->
+                        <select id="ledgerFilter" onchange="renderLedger()" class="bg-velvet text-gold-300 border border-gold-500/40 rounded px-3 py-2 font-cinzel text-xs focus:outline-none">
+                            <option value="ALL">Todos los Movimientos</option>
+                            <option value="INGRESOS">Solo Ingresos</option>
+                            <option value="EGRESOS">Solo Egresos</option>
+                        </select>
+                        <!-- Reset Button -->
+                        <button onclick="confirmResetData()" class="bg-rose-950/80 hover:bg-rose-900 border border-rose-700/60 text-rose-300 font-cinzel text-xs px-3 py-2 rounded uppercase tracking-wider flex items-center gap-1.5 transition" title="Reiniciar datos de fábrica">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto max-h-[500px] scrollbar-custom">
+                    <table class="w-full text-left text-sm text-gray-300">
+                        <thead class="bg-velvet text-gold-400 font-cinzel text-xs uppercase border-b border-gold-500/40 sticky top-0">
+                            <tr>
+                                <th class="p-3">Fecha / Hora</th>
+                                <th class="p-3">Tipo</th>
+                                <th class="p-3">Concepto / Detalle</th>
+                                <th class="p-3">Personal Atrib.</th>
+                                <th class="p-3 text-right">Monto ($)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledgerTableBody" class="divide-y divide-gold-500/10">
+                            <!-- Dynamic log -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-gold-500/30 bg-velvet py-4 px-4 text-center font-garamond text-xs text-gray-500">
+        <p class="text-gold-400/80 font-cinzel mb-1">LES BELLES NUITS &bull; ORGANIZACIÓN Y ENTRETENIMIENTO PRIVADO</p>
+        <p>Silverpeak y México. Todos los datos son almacenados localmente de forma privada en su navegador.</p>
+    </footer>
+
+    <!-- MODAL: EDIT / ADD CATALOG ITEM -->
+    <div id="itemModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="burgundy-card border-2 border-gold-500/70 p-6 rounded-lg max-w-md w-full shadow-2xl relative">
+            <h3 id="itemModalTitle" class="font-cinzel text-xl text-gold-400 font-bold mb-4 pb-2 border-b border-gold-500/30">
+                Nuevo Servicio u Oferta
+            </h3>
+            <form id="itemForm" onsubmit="saveItem(event)" class="space-y-4">
+                <input type="hidden" id="itemId">
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Nombre del Servicio / Producto:</label>
+                    <input type="text" id="itemName" required class="w-full bg-velvet text-parchment border border-gold-500/40 rounded px-3 py-2 text-sm focus:border-gold-400 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Categoría:</label>
+                    <select id="itemCategory" required class="w-full bg-velvet text-gold-300 border border-gold-500/40 rounded px-3 py-2 text-sm focus:border-gold-400 focus:outline-none">
+                        <option value="Eventos">Eventos & Planificación</option>
+                        <option value="VIP">Servicios VIP & Privados</option>
+                        <option value="Bebidas">Licores & Bebidas</option>
+                        <option value="Catering">Gastronomía & Catering</option>
+                        <option value="Espectáculos">Shows & Entretenimiento</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Precio ($):</label>
+                    <input type="number" id="itemPrice" step="0.01" min="0" required class="w-full bg-velvet text-parchment border border-gold-500/40 rounded px-3 py-2 text-sm focus:border-gold-400 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Descripción Breve:</label>
+                    <textarea id="itemDesc" rows="2" class="w-full bg-velvet text-parchment border border-gold-500/40 rounded px-3 py-2 text-sm focus:border-gold-400 focus:outline-none"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-gold-500/30">
+                    <button type="button" onclick="closeItemModal()" class="px-4 py-2 border border-gray-600 rounded text-xs font-cinzel text-gray-300 hover:bg-gray-800 uppercase">Cancelar</button>
+                    <button type="submit" class="gold-button px-5 py-2 rounded text-xs font-cinzel font-bold uppercase">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT STAFF MEMBER -->
+    <div id="staffModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="burgundy-card border-2 border-gold-500/70 p-6 rounded-lg max-w-md w-full shadow-2xl relative">
+            <h3 id="staffModalTitle" class="font-cinzel text-xl text-gold-400 font-bold mb-4 pb-2 border-b border-gold-500/30">
+                Registrar Miembro del Personal
+            </h3>
+            <form id="staffForm" onsubmit="saveStaff(event)" class="space-y-4">
+                <input type="hidden" id="staffId">
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Nombre Completo / Apodo:</label>
+                    <input type="text" id="staffName" required class="w-full bg-velvet text-parchment border border-gold-500/40 rounded px-3 py-2 text-sm focus:border-gold-400 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Cargo / Rol:</label>
+                    <select id="staffRole" required class="w-full bg-velvet text-gold-300 border border-gold-500/40 rounded px-3 py-2 text-sm focus:border-gold-400 focus:outline-none">
+                        <option value="Organizador / Planificador">Organizador / Planificador</option>
+                        <option value="Anfitrión / Hostess">Anfitrión / Hostess</option>
+                        <option value="Barman / Sommelier">Barman / Sommelier</option>
+                        <option value="Artista / Entretenimiento">Artista / Entretenimiento</option>
+                        <option value="Seguridad / Protocolo">Seguridad / Protocolo</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Sueldo Base Acordado ($):</label>
+                    <input type="number" id="staffSalary" step="0.01" min="0" required class="w-full bg-velvet text-parchment border border-gold-500/40 rounded px-3 py-2 text-sm focus:border-gold-400 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Comisión por Venta Atendida (%):</label>
+                    <input type="number" id="staffCommission" step="1" min="0" max="100" value="10" required class="w-full bg-velvet text-parchment border border-gold-500/40 rounded px-3 py-2 text-sm focus:border-gold-400 focus:outline-none">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-gold-500/30">
+                    <button type="button" onclick="closeStaffModal()" class="px-4 py-2 border border-gray-600 rounded text-xs font-cinzel text-gray-300 hover:bg-gray-800 uppercase">Cancelar</button>
+                    <button type="submit" class="gold-button px-5 py-2 rounded text-xs font-cinzel font-bold uppercase">Guardar Empleado</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: PAYOUT / BONUS -->
+    <div id="payoutModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="burgundy-card border-2 border-gold-500/70 p-6 rounded-lg max-w-md w-full shadow-2xl relative">
+            <h3 class="font-cinzel text-xl text-gold-400 font-bold mb-2">Liquidar Sueldo / Propinas</h3>
+            <p id="payoutStaffName" class="text-xs text-gray-300 font-garamond italic mb-4 pb-2 border-b border-gold-500/30"></p>
+            
+            <form id="payoutForm" onsubmit="processStaffPayout(event)" class="space-y-4">
+                <input type="hidden" id="payoutStaffId">
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Monto a Pagar ($):</label>
+                    <input type="number" id="payoutAmount" step="0.01" min="0.01" required class="w-full bg-velvet text-gold-300 font-cinzel text-lg font-bold border border-gold-500/40 rounded px-3 py-2 focus:border-gold-400 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Concepto del Pago:</label>
+                    <input type="text" id="payoutConcept" placeholder="Ej: Sueldo semanal + Comisiones" required class="w-full bg-velvet text-parchment border border-gold-500/40 rounded px-3 py-2 text-sm focus:border-gold-400 focus:outline-none">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-gold-500/30">
+                    <button type="button" onclick="closePayoutModal()" class="px-4 py-2 border border-gray-600 rounded text-xs font-cinzel text-gray-300 hover:bg-gray-800 uppercase">Cancelar</button>
+                    <button type="submit" class="gold-button px-5 py-2 rounded text-xs font-cinzel font-bold uppercase">Confirmar Pago</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: MANUAL TRANSACTION LOG -->
+    <div id="manualTxModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="burgundy-card border-2 border-gold-500/70 p-6 rounded-lg max-w-md w-full shadow-2xl relative">
+            <h3 class="font-cinzel text-xl text-gold-400 font-bold mb-4 pb-2 border-b border-gold-500/30">
+                Ajuste Manual de Caja / Contabilidad
+            </h3>
+            <form id="manualTxForm" onsubmit="saveManualTransaction(event)" class="space-y-4">
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Tipo de Movimiento:</label>
+                    <select id="manualTxType" required class="w-full bg-velvet text-gold-300 border border-gold-500/40 rounded px-3 py-2 text-sm focus:outline-none">
+                        <option value="INGRESO">Ingreso (+ Entrada de dinero)</option>
+                        <option value="EGRESO">Egreso (- Gasto / Salida de caja)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Monto ($):</label>
+                    <input type="number" id="manualTxAmount" step="0.01" min="0.01" required class="w-full bg-velvet text-parchment border border-gold-500/40 rounded px-3 py-2 text-sm focus:border-gold-400 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-cinzel text-xs text-gray-300 mb-1">Concepto / Motivo:</label>
+                    <input type="text" id="manualTxConcept" placeholder="Ej. Aporte inicial de capital, Compra de licor..." required class="w-full bg-velvet text-parchment border border-gold-500/40 rounded px-3 py-2 text-sm focus:border-gold-400 focus:outline-none">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-gold-500/30">
+                    <button type="button" onclick="closeManualTxModal()" class="px-4 py-2 border border-gray-600 rounded text-xs font-cinzel text-gray-300 hover:bg-gray-800 uppercase">Cancelar</button>
+                    <button type="submit" class="gold-button px-5 py-2 rounded text-xs font-cinzel font-bold uppercase">Registrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CUSTOM NOTIFICATION BANNER -->
+    <div id="notificationBanner" class="fixed bottom-5 right-5 max-w-sm bg-burgundy-900 border-2 border-gold-400 text-gold-100 p-4 rounded-lg shadow-2xl hidden transform transition-all z-50">
+        <div class="flex items-center gap-3">
+            <i id="notifIcon" class="fa-solid fa-circle-check text-gold-400 text-xl"></i>
+            <div>
+                <p id="notifTitle" class="font-cinzel text-xs font-bold text-gold-300 uppercase"></p>
+                <p id="notifMessage" class="text-xs font-garamond text-gray-200"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPLICATION LOGIC (JS) -->
+    <script>
+        // --- INITIAL STATE & DEFAULT DATA ---
+        const DEFAULT_CATALOG = [
+            { id: 'cat_1', name: 'Alquiler Salón de Baile Operístico', category: 'Eventos', price: 1500.00, desc: 'Reserva exclusiva del gran salón con iluminación a velas y servicio de protocolo.' },
+            { id: 'cat_2', name: 'Palco Privado Nocturno', category: 'VIP', price: 600.00, desc: 'Área aislada con cortinas de terciopelo, mozo dedicado y botella de champagne reserva.' },
+            { id: 'cat_3', name: 'Champagne Étoile d\'Or', category: 'Bebidas', price: 250.00, desc: 'Botella de champagne francés vintage de la bodega privada.' },
+            { id: 'cat_4', name: 'Licor de Rosa & Absenta', category: 'Bebidas', price: 85.00, desc: 'Cóctel emblemático preparado al estilo victoriano tradicional.' },
+            { id: 'cat_5', name: 'Banquete de Caza & Trufas', category: 'Catering', price: 320.00, desc: 'Selección de manjares rústicos, quesos madurados y frutos del bosque.' },
+            { id: 'cat_6', name: 'Recital de Piano & Cello Privado', category: 'Espectáculos', price: 450.00, desc: 'Dos horas de interpretación musical personalizada para la velada.' }
+        ];
+
+        const DEFAULT_STAFF = [
+            { id: 'stf_1', name: 'Madame Vivienne', role: 'Organizador / Planificador', salary: 500.00, commission: 15, totalEarned: 0, pendingCommission: 0 },
+            { id: 'stf_2', name: 'Monsieur Julien', role: 'Barman / Sommelier', salary: 350.00, commission: 10, totalEarned: 0, pendingCommission: 0 },
+            { id: 'stf_3', name: 'Lord Sterling', role: 'Seguridad / Protocolo', salary: 300.00, commission: 5, totalEarned: 0, pendingCommission: 0 }
+        ];
+
+        // State Variables
+        let catalog = JSON.parse(localStorage.getItem('lbn_catalog')) || DEFAULT_CATALOG;
+        let staff = JSON.parse(localStorage.getItem('lbn_staff')) || DEFAULT_STAFF;
+        let ledger = JSON.parse(localStorage.getItem('lbn_ledger')) || [
+            { id: 'tx_init', date: new Date().toLocaleString(), type: 'INGRESO', concept: 'Fondo Inicial de Caja', amount: 2000.00, staffName: 'Dirección' }
+        ];
+        let cart = [];
+
+        // Save State to LocalStorage
+        function saveState() {
+            localStorage.setItem('lbn_catalog', JSON.stringify(catalog));
+            localStorage.setItem('lbn_staff', JSON.stringify(staff));
+            localStorage.setItem('lbn_ledger', JSON.stringify(ledger));
+            updateHeaderBalances();
+        }
+
+        // --- NAVIGATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            if (tabId === 'pos') {
+                renderPOSCatalog();
+                renderCart();
+                populateEmployeeSelect();
+            } else if (tabId === 'catalog') {
+                renderCatalogTable();
+            } else if (tabId === 'payroll') {
+                renderStaffGrid();
+            } else if (tabId === 'ledger') {
+                renderLedger();
+            }
+        }
+
+        // --- CALCULATE TOTALS & BALANCES ---
+        function getFinancials() {
+            let inflows = 0;
+            let outflows = 0;
+
+            ledger.forEach(tx => {
+                if (tx.type === 'INGRESO') inflows += tx.amount;
+                if (tx.type === 'EGRESO') outflows += tx.amount;
+            });
+
+            const netBalance = inflows - outflows;
+            const cashDrawer = netBalance; // Assuming all transactions affect cash drawer directly
+
+            return { inflows, outflows, netBalance, cashDrawer };
+        }
+
+        function updateHeaderBalances() {
+            const { cashDrawer, netBalance } = getFinancials();
+            document.getElementById('headerCashDrawer').textContent = `$${cashDrawer.toFixed(2)}`;
+            document.getElementById('headerNetBalance').textContent = `$${netBalance.toFixed(2)}`;
+        }
+
+        // --- POS & CART FUNCTIONS ---
+        function renderPOSCatalog() {
+            const grid = document.getElementById('posGrid');
+            const catFilter = document.getElementById('posCategoryFilter').value;
+            const search = document.getElementById('posSearch').value.toLowerCase();
+
+            grid.innerHTML = '';
+
+            const filtered = catalog.filter(item => {
+                const matchesCat = catFilter === 'ALL' || item.category === catFilter;
+                const matchesSearch = item.name.toLowerCase().includes(search) || (item.desc && item.desc.toLowerCase().includes(search));
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center text-xs text-gray-500 py-6 italic font-garamond">No se encontraron ofertas o servicios.</p>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-velvet/80 hover:bg-burgundy-900/60 border border-gold-500/30 hover:border-gold-400 p-3 rounded flex flex-col justify-between cursor-pointer transition shadow group";
+                card.onclick = () => addToCart(item.id);
+                card.innerHTML = `
+                    <div>
+                        <span class="text-[10px] font-cinzel text-gold-500 uppercase block tracking-wider">${item.category}</span>
+                        <h4 class="font-cinzel text-sm font-bold text-gray-200 group-hover:text-gold-300 leading-tight">${item.name}</h4>
+                        <p class="text-[11px] text-gray-400 font-garamond line-clamp-2 mt-1">${item.desc || ''}</p>
+                    </div>
+                    <div class="mt-3 flex justify-between items-center border-t border-gold-500/10 pt-2">
+                        <span class="font-cinzel font-bold text-gold-400">$${item.price.toFixed(2)}</span>
+                        <span class="text-[10px] bg-gold-500/10 text-gold-300 px-2 py-0.5 rounded border border-gold-500/30 group-hover:bg-gold-500 group-hover:text-velvet font-cinzel font-bold">
+                            + Añadir
+                        </span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function addToCart(itemId) {
+            const item = catalog.find(i => i.id === itemId);
+            if (!item) return;
+
+            const existing = cart.find(c => c.id === itemId);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ id: item.id, name: item.name, price: item.price, qty: 1 });
+            }
+
+            renderCart();
+        }
+
+        function addCustomToCart() {
+            const nameInput = document.getElementById('customName');
+            const priceInput = document.getElementById('customPrice');
+
+            const name = nameInput.value.trim() || 'Servicio Especial / Capricho';
+            const price = parseFloat(priceInput.value);
+
+            if (isNaN(price) || price <= 0) {
+                showNotification('Error', 'Ingrese un precio válido para el servicio personalizado.', 'fa-circle-xmark');
+                return;
+            }
+
+            cart.push({
+                id: 'custom_' + Date.now(),
+                name: name + ' (Especial)',
+                price: price,
+                qty: 1
+            });
+
+            nameInput.value = '';
+            priceInput.value = '';
+            renderCart();
+        }
+
+        function updateCartQty(index, change) {
+            cart[index].qty += change;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            renderCart();
+        }
+
+        function clearCart() {
+            cart = [];
+            document.getElementById('cashTendered').value = '';
+            renderCart();
+        }
+
+        function getCartTotal() {
+            return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        }
+
+        function renderCart() {
+            const cartList = document.getElementById('cartList');
+            cartList.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartList.innerHTML = `<p class="text-center text-xs text-gray-500 py-8 italic font-garamond">El ticket está vacío. Seleccione servicios o bebidas.</p>`;
+            } else {
+                cart.forEach((item, index) => {
+                    const row = document.createElement('div');
+                    row.className = "flex justify-between items-center bg-velvet/60 p-2 rounded border border-gold-500/20 text-xs";
+                    row.innerHTML = `
+                        <div class="flex-grow pr-2">
+                            <span class="font-cinzel text-gray-200 block">${item.name}</span>
+                            <span class="text-gold-400 font-cinzel">$${item.price.toFixed(2)} c/u</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="updateCartQty(${index}, -1)" class="w-5 h-5 bg-burgundy-800 text-gold-300 rounded hover:bg-burgundy-700 font-bold flex items-center justify-center">-</button>
+                            <span class="font-cinzel font-bold text-gray-200">${item.qty}</span>
+                            <button onclick="updateCartQty(${index}, 1)" class="w-5 h-5 bg-burgundy-800 text-gold-300 rounded hover:bg-burgundy-700 font-bold flex items-center justify-center">+</button>
+                            <span class="font-cinzel font-bold text-gold-300 w-14 text-right">$${(item.price * item.qty).toFixed(2)}</span>
+                        </div>
+                    `;
+                    cartList.appendChild(row);
+                });
+            }
+
+            const total = getCartTotal();
+            document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+            calculateChange();
+        }
+
+        function populateEmployeeSelect() {
+            const select = document.getElementById('cartEmployeeSelect');
+            select.innerHTML = `<option value="">-- Ninguno (Casa) --</option>`;
+            staff.forEach(s => {
+                select.innerHTML += `<option value="${s.id}">${s.name} (${s.role})</option>`;
+            });
+        }
+
+        function setTenderedExact() {
+            document.getElementById('cashTendered').value = getCartTotal().toFixed(2);
+            calculateChange();
+        }
+
+        function addTendered(amount) {
+            const current = parseFloat(document.getElementById('cashTendered').value) || 0;
+            document.getElementById('cashTendered').value = (current + amount).toFixed(2);
+            calculateChange();
+        }
+
+        function calculateChange() {
+            const total = getCartTotal();
+            const tendered = parseFloat(document.getElementById('cashTendered').value) || 0;
+            const changeDueEl = document.getElementById('changeDue');
+
+            if (tendered >= total && total > 0) {
+                const change = tendered - total;
+                changeDueEl.textContent = `$${change.toFixed(2)}`;
+                changeDueEl.className = "w-full bg-velvet/50 border border-gold-500/20 rounded px-3 py-1.5 font-cinzel text-lg font-bold text-emerald-400 text-right";
+            } else {
+                changeDueEl.textContent = `$0.00`;
+                if (tendered > 0 && tendered < total) {
+                    changeDueEl.className = "w-full bg-velvet/50 border border-rose-500/30 rounded px-3 py-1.5 font-cinzel text-lg font-bold text-rose-400 text-right";
+                }
+            }
+        }
+
+        function processCheckout() {
+            const total = getCartTotal();
+            if (total <= 0) {
+                showNotification('Ticket Vacío', 'Añada al menos un servicio o producto para registrar la venta.', 'fa-circle-exclamation');
+                return;
+            }
+
+            const tendered = parseFloat(document.getElementById('cashTendered').value) || 0;
+            if (tendered < total) {
+                showNotification('Monto Insuficiente', 'El dinero entregado por el cliente es menor que el total.', 'fa-triangle-exclamation');
+                return;
+            }
+
+            const empId = document.getElementById('cartEmployeeSelect').value;
+            let empName = 'Casa';
+            let commissionEarned = 0;
+
+            if (empId) {
+                const employee = staff.find(s => s.id === empId);
+                if (employee) {
+                    empName = employee.name;
+                    commissionEarned = (total * (employee.commission / 100));
+                    employee.pendingCommission = (employee.pendingCommission || 0) + commissionEarned;
+                    employee.totalEarned = (employee.totalEarned || 0) + commissionEarned;
+                }
+            }
+
+            // Create Transaction Detail String
+            const itemDetails = cart.map(c => `${c.qty}x ${c.name}`).join(', ');
+
+            // Log to Ledger
+            ledger.unshift({
+                id: 'tx_' + Date.now(),
+                date: new Date().toLocaleString(),
+                type: 'INGRESO',
+                concept: `Venta: ${itemDetails}`,
+                amount: total,
+                staffName: empName
+            });
+
+            saveState();
+            clearCart();
+            showNotification('Venta Registrada', `Cobro de $${total.toFixed(2)} registrado con éxito.`, 'fa-circle-check');
+        }
+
+        // --- CATALOG MANAGEMENT FUNCTIONS ---
+        function renderCatalogTable() {
+            const tbody = document.getElementById('catalogTableBody');
+            tbody.innerHTML = '';
+
+            catalog.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-burgundy-900/30 transition";
+                tr.innerHTML = `
+                    <td class="p-3 font-cinzel font-bold text-gold-300">${item.name}</td>
+                    <td class="p-3"><span class="bg-gold-500/10 text-gold-400 border border-gold-500/30 text-[10px] font-cinzel px-2 py-0.5 rounded">${item.category}</span></td>
+                    <td class="p-3 font-garamond text-gray-300 text-xs">${item.desc || '-'}</td>
+                    <td class="p-3 text-right font-cinzel font-bold text-gold-400">$${item.price.toFixed(2)}</td>
+                    <td class="p-3 text-center space-x-2">
+                        <button onclick="editItem('${item.id}')" class="text-gold-400 hover:text-gold-200"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteItem('${item.id}')" class="text-rose-400 hover:text-rose-200"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openItemModal(itemId = null) {
+            document.getElementById('itemForm').reset();
+            document.getElementById('itemId').value = '';
+
+            if (itemId) {
+                const item = catalog.find(i => i.id === itemId);
+                if (item) {
+                    document.getElementById('itemId').value = item.id;
+                    document.getElementById('itemName').value = item.name;
+                    document.getElementById('itemCategory').value = item.category;
+                    document.getElementById('itemPrice').value = item.price;
+                    document.getElementById('itemDesc').value = item.desc || '';
+                    document.getElementById('itemModalTitle').textContent = 'Editar Servicio / Oferta';
+                }
+            } else {
+                document.getElementById('itemModalTitle').textContent = 'Nuevo Servicio / Oferta';
+            }
+
+            document.getElementById('itemModal').classList.remove('hidden');
+        }
+
+        function closeItemModal() {
+            document.getElementById('itemModal').classList.add('hidden');
+        }
+
+        function saveItem(e) {
+            e.preventDefault();
+            const id = document.getElementById('itemId').value;
+            const name = document.getElementById('itemName').value.trim();
+            const category = document.getElementById('itemCategory').value;
+            const price = parseFloat(document.getElementById('itemPrice').value);
+            const desc = document.getElementById('itemDesc').value.trim();
+
+            if (id) {
+                const index = catalog.findIndex(i => i.id === id);
+                if (index !== -1) {
+                    catalog[index] = { id, name, category, price, desc };
+                }
+            } else {
+                catalog.push({
+                    id: 'cat_' + Date.now(),
+                    name, category, price, desc
+                });
+            }
+
+            saveState();
+            closeItemModal();
+            renderCatalogTable();
+            showNotification('Catálogo Actualizado', 'Servicio guardado con éxito.', 'fa-circle-check');
+        }
+
+        function deleteItem(itemId) {
+            if (confirm('¿Está seguro de eliminar este servicio del catálogo?')) {
+                catalog = catalog.filter(i => i.id !== itemId);
+                saveState();
+                renderCatalogTable();
+                showNotification('Eliminado', 'Servicio removido.', 'fa-circle-check');
+            }
+        }
+
+        function editItem(itemId) {
+            openItemModal(itemId);
+        }
+
+        // --- STAFF & PAYROLL FUNCTIONS ---
+        function renderStaffGrid() {
+            const grid = document.getElementById('staffGrid');
+            grid.innerHTML = '';
+
+            staff.forEach(s => {
+                const card = document.createElement('div');
+                card.className = "burgundy-card border border-gold-500/40 p-4 rounded-lg flex flex-col justify-between shadow-lg relative";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start border-b border-gold-500/20 pb-2 mb-3">
+                            <div>
+                                <h3 class="font-cinzel font-bold text-lg text-gold-300">${s.name}</h3>
+                                <span class="text-xs font-cinzel text-gray-400 block">${s.role}</span>
+                            </div>
+                            <button onclick="deleteStaff('${s.id}')" class="text-rose-400/60 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+
+                        <div class="space-y-1.5 text-xs font-garamond text-gray-300 mb-4">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400 font-cinzel">Sueldo Base Acordado:</span>
+                                <span class="font-bold text-gold-400 font-cinzel">$${s.salary.toFixed(2)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400 font-cinzel">Comisión Venta:</span>
+                                <span class="font-bold text-gold-400 font-cinzel">${s.commission}%</span>
+                            </div>
+                            <div class="flex justify-between border-t border-gold-500/10 pt-1">
+                                <span class="text-gray-400 font-cinzel">Comisión Pendiente:</span>
+                                <span class="font-bold text-emerald-400 font-cinzel">$${(s.pendingCommission || 0).toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-gold-500/20 flex gap-2">
+                        <button onclick="openPayoutModal('${s.id}')" class="gold-button w-full font-cinzel text-xs font-bold py-1.5 rounded uppercase tracking-wider">
+                            Liquidar Pago / Sueldo
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openStaffModal() {
+            document.getElementById('staffForm').reset();
+            document.getElementById('staffModal').classList.remove('hidden');
+        }
+
+        function closeStaffModal() {
+            document.getElementById('staffModal').classList.add('hidden');
+        }
+
+        function saveStaff(e) {
+            e.preventDefault();
+            const name = document.getElementById('staffName').value.trim();
+            const role = document.getElementById('staffRole').value;
+            const salary = parseFloat(document.getElementById('staffSalary').value);
+            const commission = parseFloat(document.getElementById('staffCommission').value);
+
+            staff.push({
+                id: 'stf_' + Date.now(),
+                name, role, salary, commission,
+                totalEarned: 0,
+                pendingCommission: 0
+            });
+
+            saveState();
+            closeStaffModal();
+            renderStaffGrid();
+            showNotification('Empleado Registrado', `${name} ha sido añadido al personal.`, 'fa-user-check');
+        }
+
+        function deleteStaff(staffId) {
+            if (confirm('¿Desea retirar a este empleado del registro de Les Belles Nuits?')) {
+                staff = staff.filter(s => s.id !== staffId);
+                saveState();
+                renderStaffGrid();
+            }
+        }
+
+        function openPayoutModal(staffId) {
+            const employee = staff.find(s => s.id === staffId);
+            if (!employee) return;
+
+            document.getElementById('payoutStaffId').value = employee.id;
+            document.getElementById('payoutStaffName').textContent = `${employee.name} (${employee.role}) - Comisiones Acumuladas: $${(employee.pendingCommission || 0).toFixed(2)}`;
+            
+            // Suggest payout total (salary + pending commission)
+            const suggestedAmount = employee.salary + (employee.pendingCommission || 0);
+            document.getElementById('payoutAmount').value = suggestedAmount.toFixed(2);
+            document.getElementById('payoutConcept').value = `Pago de Sueldo Base + Comisiones Acumuladas`;
+
+            document.getElementById('payoutModal').classList.remove('hidden');
+        }
+
+        function closePayoutModal() {
+            document.getElementById('payoutModal').classList.add('hidden');
+        }
+
+        function processStaffPayout(e) {
+            e.preventDefault();
+            const staffId = document.getElementById('payoutStaffId').value;
+            const amount = parseFloat(document.getElementById('payoutAmount').value);
+            const concept = document.getElementById('payoutConcept').value.trim();
+
+            const employee = staff.find(s => s.id === staffId);
+            if (!employee) return;
+
+            const { cashDrawer } = getFinancials();
+            if (amount > cashDrawer) {
+                if (!confirm('Atención: El pago supera el fondo de caja disponible. ¿Desea proceder con número negativo en caja?')) {
+                    return;
+                }
+            }
+
+            // Reset pending commission if fully paid
+            employee.pendingCommission = 0;
+
+            // Log Expense in Ledger
+            ledger.unshift({
+                id: 'tx_' + Date.now(),
+                date: new Date().toLocaleString(),
+                type: 'EGRESO',
+                concept: `Pago de Sueldo / Nómina a ${employee.name}: ${concept}`,
+                amount: amount,
+                staffName: employee.name
+            });
+
+            saveState();
+            closePayoutModal();
+            renderStaffGrid();
+            showNotification('Pago Registrado', `Se ha abonado $${amount.toFixed(2)} a ${employee.name}.`, 'fa-coins');
+        }
+
+        // --- LEDGER / CONTABILIDAD FUNCTIONS ---
+        function renderLedger() {
+            const { inflows, outflows, netBalance, cashDrawer } = getFinancials();
+
+            document.getElementById('ledgerInflows').textContent = `$${inflows.toFixed(2)}`;
+            document.getElementById('ledgerOutflows').textContent = `$${outflows.toFixed(2)}`;
+            document.getElementById('ledgerNet').textContent = `$${netBalance.toFixed(2)}`;
+            document.getElementById('ledgerCash').textContent = `$${cashDrawer.toFixed(2)}`;
+
+            const filter = document.getElementById('ledgerFilter').value;
+            const tbody = document.getElementById('ledgerTableBody');
+            tbody.innerHTML = '';
+
+            const filteredLedger = ledger.filter(tx => {
+                if (filter === 'INGRESOS') return tx.type === 'INGRESO';
+                if (filter === 'EGRESOS') return tx.type === 'EGRESO';
+                return true;
+            });
+
+            if (filteredLedger.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-xs text-gray-500 italic">No hay movimientos registrados en esta categoría.</td></tr>`;
+                return;
+            }
+
+            filteredLedger.forEach(tx => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-burgundy-900/30 transition text-xs";
+                
+                const isIncome = tx.type === 'INGRESO';
+                const typeBadge = isIncome 
+                    ? `<span class="bg-emerald-950 text-emerald-400 border border-emerald-700/60 px-2 py-0.5 rounded font-cinzel font-bold">INGRESO</span>`
+                    : `<span class="bg-rose-950 text-rose-400 border border-rose-700/60 px-2 py-0.5 rounded font-cinzel font-bold">EGRESO</span>`;
+
+                const amountClass = isIncome ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+                const prefix = isIncome ? '+' : '-';
+
+                tr.innerHTML = `
+                    <td class="p-3 text-gray-400 font-cinzel">${tx.date}</td>
+                    <td class="p-3">${typeBadge}</td>
+                    <td class="p-3 font-garamond text-gray-200">${tx.concept}</td>
+                    <td class="p-3 font-cinzel text-gold-400/90">${tx.staffName || 'Casa'}</td>
+                    <td class="p-3 text-right font-cinzel ${amountClass}">${prefix}$${tx.amount.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openManualTransactionModal() {
+            document.getElementById('manualTxForm').reset();
+            document.getElementById('manualTxModal').classList.remove('hidden');
+        }
+
+        function closeManualTxModal() {
+            document.getElementById('manualTxModal').classList.add('hidden');
+        }
+
+        function saveManualTransaction(e) {
+            e.preventDefault();
+            const type = document.getElementById('manualTxType').value;
+            const amount = parseFloat(document.getElementById('manualTxAmount').value);
+            const concept = document.getElementById('manualTxConcept').value.trim();
+
+            ledger.unshift({
+                id: 'tx_' + Date.now(),
+                date: new Date().toLocaleString(),
+                type: type,
+                concept: `Ajuste Manual: ${concept}`,
+                amount: amount,
+                staffName: 'Gerencia'
+            });
+
+            saveState();
+            closeManualTxModal();
+            renderLedger();
+            showNotification('Movimiento Registrado', 'Ajuste manual de contabilidad guardado.', 'fa-book-journal-whills');
+        }
+
+        function confirmResetData() {
+            if (confirm('¿ATENCIÓN: Desea reiniciar todos los datos a sus valores predeterminados? Esta acción no se puede deshacer.')) {
+                localStorage.clear();
+                catalog = DEFAULT_CATALOG;
+                staff = DEFAULT_STAFF;
+                ledger = [{ id: 'tx_init', date: new Date().toLocaleString(), type: 'INGRESO', concept: 'Fondo Inicial de Caja', amount: 2000.00, staffName: 'Dirección' }];
+                saveState();
+                switchTab('pos');
+                showNotification('Reiniciado', 'Datos restablecidos a la configuración victoriana original.', 'fa-rotate-left');
+            }
+        }
+
+        // --- NOTIFICATION SYSTEM ---
+        function showNotification(title, message, iconClass = 'fa-circle-check') {
+            const banner = document.getElementById('notificationBanner');
+            document.getElementById('notifTitle').textContent = title;
+            document.getElementById('notifMessage').textContent = message;
+            document.getElementById('notifIcon').className = `fa-solid ${iconClass} text-gold-400 text-xl`;
+
+            banner.classList.remove('hidden');
+            setTimeout(() => {
+                banner.classList.add('hidden');
+            }, 3500);
+        }
+
+        // --- INIT ON LOAD ---
+        window.onload = function() {
+            updateHeaderBalances();
+            renderPOSCatalog();
+            renderCart();
+            populateEmployeeSelect();
+        };
+    </script>
+</body>
+</html>
